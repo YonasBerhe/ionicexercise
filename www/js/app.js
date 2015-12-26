@@ -8,7 +8,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngOpenFB'])
 
 .run(function($ionicPlatform, ngFB) {
 
-  ngFB.init({appId: '1183611635002356'});
+  ngFB.init({
+    appId: '1183611635002356'
+  });
 
 
   $ionicPlatform.ready(function() {
@@ -65,15 +67,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngOpenFB'])
   })
 
 
+  .state('app.profile', {
+    url: "/profile",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/profile.html",
+        controller: "ProfileCtrl"
+      }
+    }
+  })
+
+
   .state('app.session', {
     url: "/sessions/:sessionId",
     views: {
-        'menuContent': {
-          templateUrl: "templates/session.html",
-          controller: 'SessionCtrl'
+      'menuContent': {
+        templateUrl: "templates/session.html",
+        controller: 'SessionCtrl'
       }
     }
-});
+  });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/sessions');
 });

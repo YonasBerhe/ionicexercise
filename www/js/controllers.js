@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
 
 
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout , ngFB) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, ngFB) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -44,25 +44,64 @@ angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
   };
 
 
-  $scope.fbLogin = function () {
-    ngFB.login({scope: 'email'}).then(
-        function (response) {
-            if (response.status === 'connected') {
-                console.log('Facebook login succeeded');
-                $scope.closeLogin();
-            } else {
-                alert('Facebook login failed');
-            }
-        });
-};
+  $scope.fbLogin = function() {
+    ngFB.login({
+      scope: 'email'
+    }).then(
+      function(response) {
+        if (response.status === 'connected') {
+          console.log('Facebook login succeeded');
+          $scope.closeLogin();
+        } else {
+          alert('Facebook login failed');
+        }
+      });
+  };
 
 })
 
 .controller('SessionCtrl', function($scope, $stateParams, Session) {
-    $scope.session = Session.get({sessionId: $stateParams.sessionId});
+  $scope.session = Session.get({
+    sessionId: $stateParams.sessionId
+  });
 })
 
 
-.controller('SessionsCtrl', function ($scope, Session) {
+.controller('SessionsCtrl', function($scope, Session, ngFB) {
   $scope.sessions = Session.query();
+
+  $scope.share = function(event) {
+    ngFB.api({
+      method: 'POST',
+      path: '/me/feed',
+      params: {
+        message: "I'll be attending: '" + $scope.session.title + "' by " +
+          $scope.session.speaker
+      }
+    }).then(
+      function() {
+        alert('The session was shared on Facebook');
+      },
+      function() {
+        alert('An error occurred while sharing this session on Facebook');
+      });
+  };
+
+
 })
+
+
+.controller('ProfileCtrl', function($scope, ngFB) {
+  ngFB.api({
+    path: '/me',
+    params: {
+      fields: 'id,name'
+    }
+  }).then(
+    function(user) {
+      $scope.user = user;
+    },
+    function(error) {
+      alert('Facebook error: ' + error.error_description);
+    });
+});
