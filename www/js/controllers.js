@@ -2,14 +2,6 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 
-.controller('SessionCtrl', function($scope, $stateParams, Session) {
-    $scope.session = Session.get({sessionId: $stateParams.sessionId});
-})
-
-
-.controller('SessionsCtrl', function ($scope, Session) {
-  $scope.sessions = Session.query();
-})
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -50,4 +42,13 @@ angular.module('starter.controllers', ['starter.services'])
       $scope.closeLogin();
     }, 1000);
   };
+})
+
+.controller('SessionCtrl', function($scope, $stateParams, Session) {
+    $scope.session = Session.get({sessionId: $stateParams.sessionId});
+})
+
+
+.controller('SessionsCtrl', function ($scope, Session) {
+  $scope.sessions = Session.query();
 })
